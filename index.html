@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fayl Hajmi Konvertori</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0b1120; color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .card { background: #1e293b; padding: 25px; border-radius: 16px; width: 350px; text-align: center; }
+        h2 { color: #60a5fa; margin-bottom: 20px; }
+        input {
+            width: 100%; padding: 12px; background: #0f172a; border: 2px solid #334155;
+            color: white; border-radius: 8px; font-size: 18px; text-align: center; margin-bottom: 20px;
+        }
+        input:focus { border-color: #60a5fa; outline: none; }
+        .conversions { display: grid; gap: 10px; }
+        .item {
+            background: #0f172a; padding: 12px; border-radius: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .unit { font-weight: bold; color: #94a3b8; }
+        .value { color: #34d399; font-family: monospace; cursor: pointer; }
+        .note { margin-top: 15px; font-size: 12px; color: #64748b; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>📏 Fayl Hajmi Konvertori</h2>
+        <input type="number" id="bytes" placeholder="Bayt sonini kiriting" min="0">
+        <div class="conversions">
+            <div class="item"><span class="unit">KB (10³)</span><span class="value" id="kb">0</span></div>
+            <div class="item"><span class="unit">MB (10⁶)</span><span class="value" id="mb">0</span></div>
+            <div class="item"><span class="unit">GB (10⁹)</span><span class="value" id="gb">0</span></div>
+            <div class="item"><span class="unit">TB (10¹²)</span><span class="value" id="tb">0</span></div>
+            <div class="item"><span class="unit">KiB (2¹⁰)</span><span class="value" id="kib">0</span></div>
+            <div class="item"><span class="unit">MiB (2²⁰)</span><span class="value" id="mib">0</span></div>
+        </div>
+        <div class="note">🔹 10³ asosi (SI) yoki 2¹⁰ asosi (IEC) bo'yicha hisoblanadi</div>
+    </div>
+
+    <script>
+        const input = document.getElementById('bytes');
+        
+        function format(num) {
+            return num.toLocaleString('en-US', { maximumFractionDigits: 4 }) + ' ';
+        }
+
+        function convert() {
+            const val = parseFloat(input.value) || 0;
+            document.getElementById('kb').textContent = format(val / 1000);
+            document.getElementById('mb').textContent = format(val / 1_000_000);
+            document.getElementById('gb').textContent = format(val / 1_000_000_000);
+            document.getElementById('tb').textContent = format(val / 1_000_000_000_000);
+            document.getElementById('kib').textContent = format(val / 1024);
+            document.getElementById('mib').textContent = format(val / (1024 ** 2));
+        }
+
+        input.addEventListener('input', convert);
+        
+        // Click to copy
+        document.querySelectorAll('.value').forEach(el => {
+            el.addEventListener('click', () => {
+                navigator.clipboard.writeText(el.textContent.trim());
+                el.textContent = '✅ Nusxalandi!';
+                setTimeout(() => convert(), 800);
+            });
+        });
+    </script>
+</body>
+</html>
